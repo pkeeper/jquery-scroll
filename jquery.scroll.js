@@ -418,6 +418,9 @@ Changelog:
         //
         appendEvents: function(){
 
+            //need this for added event listeners
+            var self = this;
+
             // append drag-drop event on scrollbar-handle
             // the events 'mousemove.handle' and 'mouseup.handle' are dynamically appended in the startOfHandleMove-function
             this.handle.bind('mousedown.handle', $.proxy(this, 'startOfHandleMove'));
@@ -436,6 +439,52 @@ Changelog:
 
             // append hover event on content container
             this.container.bind('mouseenter.container mouseleave.container', $.proxy(this, 'onContentHover'));
+
+            //there's definitely a better way to do this, but the following handles 
+            //pgup/dn and up and down arrow key events after the container element has been 'focused';
+            
+            //add a class of focused and prevent the event from bubbling any further
+    		this.container.bind('click',function(e) {
+				self.container.addClass('focused');
+				return false;
+			});
+            
+            //remove focused class if the event bubbles all the way up to the document
+    		$(document).live('click',function(e) {
+				self.container.removeClass('focused');
+			});
+			
+            //handle the key events
+			$(document).bind('keydown',function(e) {
+				if(self.container.hasClass('focused')) {
+					var timer = false;
+					//bind the arrow keys
+					switch(e.keyCode) {
+						case 38 : 	//up arrow
+							self.handle.direction = -1;
+							self.handle.step = self.opts.scrollStepArrows;
+							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+							break;
+						case 40 :	//down arrow
+							self.handle.direction = 1;
+							self.handle.step = self.opts.scrollStepArrows;
+							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+							break;
+						case 33 :	//pgup
+							self.handle.direction = -1;
+							self.handle.step = self.opts.scrollStepArrows*15;
+							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+							break;
+						case	34 : //pgdn
+							self.handle.direction = 1;
+							self.handle.step = self.opts.scrollStepArrows*15;
+							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+							break;
+					}
+					
+				}
+				
+			});
 
             // do not bubble down click events into content container
             this.handle.bind('click.scrollbar', this.preventClickBubbling);
