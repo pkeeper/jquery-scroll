@@ -768,7 +768,9 @@ Changelog:
 
       // inner-wrap content temporarily and meassure content height.
       // wrapper container need to have an overflow set to 'hidden' to respect margin collapsing
-      var wrapper = container.wrapInner('<div/>').find(':first');
+      
+      //add style="zoom:1" to fix IE7 bug where the scrollbar doesn't work if the content has floated elements
+      var wrapper = container.wrapInner('<div style="zoom:1"/>').find(':first');
       var height = wrapper.css({overflow:'hidden'}).height();
       wrapper.replaceWith(wrapper.contents());
       return height;
