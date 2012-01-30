@@ -451,52 +451,52 @@ Changelog:
             //there's definitely a better way to do this, but the following handles 
             //pgup/dn and up and down arrow key events after the container element has been 'focused';
             
-            //add a class of focused and prevent the event from bubbling any further
+            	//add a class of focused and prevent the event from bubbling any further
     		this.container.bind('click',function(e) {
-				self.container.addClass('focused');
-				return false;
-			});
+			self.container.addClass('focused');
+			return false;
+		});
             
-            //remove focused class if the event bubbles all the way up to the document
+            	//remove focused class if the event bubbles all the way up to the document
     		$(document).live('click',function(e) {
-				self.container.removeClass('focused');
-			});
+			self.container.removeClass('focused');
+		});
 			
-            //handle the key events
-			$(document).bind('keydown',function(e) {
-				if(self.container.hasClass('focused')) {
-					var timer = false;
-					//bind the arrow keys
-					switch(e.keyCode) {
-						case 38 : 	//up arrow
-							e.preventDefault();
-							self.handle.direction = -1;
-							self.handle.step = self.opts.scrollStepArrows;
-							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
-							break;
-						case 40 :	//down arrow
-							e.preventDefault();
-							self.handle.direction = 1;
-							self.handle.step = self.opts.scrollStepArrows;
-							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
-							break;
-						case 33 :	//pgup
-							e.preventDefault();
-							self.handle.direction = -1;
-							self.handle.step = self.opts.scrollStepArrows*15;
-							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
-							break;
-						case	34 : //pgdn
-							e.preventDefault();
-							self.handle.direction = 1;
-							self.handle.step = self.opts.scrollStepArrows*15;
-							timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
-							break;
-					}
-					
+            	//handle the key events
+		$(document).bind('keydown',function(e) {
+			if(self.container.hasClass('focused') || self.container.hasClass('hover')) {
+				var timer = false;
+				//bind the arrow keys
+				switch(e.keyCode) {
+					case 38 : 	//up arrow
+						e.preventDefault();
+						self.handle.direction = -1;
+						self.handle.step = self.opts.scrollStepArrows;
+						timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+						break;
+					case 40 :	//down arrow
+						e.preventDefault();
+						self.handle.direction = 1;
+						self.handle.step = self.opts.scrollStepArrows;
+						timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+						break;
+					case 33 :	//pgup
+						e.preventDefault();
+						self.handle.direction = -1;
+						self.handle.step = self.opts.scrollStepArrows*15;
+						timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+						break;
+					case	34 : //pgdn
+						e.preventDefault();
+						self.handle.direction = 1;
+						self.handle.step = self.opts.scrollStepArrows*15;
+						timer = setTimeout($.proxy(self.moveHandle, self), self.opts.scrollTimeoutArrows);
+						break;
 				}
 				
-			});
+			}
+			
+		});
 
             // do not bubble down click events into content container
             this.handle.bind('click.scrollbar', this.preventClickBubbling);
