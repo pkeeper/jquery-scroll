@@ -785,8 +785,6 @@ Changelog:
       var wrapper = container.wrapInner('<div style="zoom:1"/>').find(':first');
       var height = wrapper.css({overflow:'hidden'}).height();
 	  
-	  console.log(height);
-	  
       wrapper.replaceWith(wrapper.contents());
       return height;
     };
