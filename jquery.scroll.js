@@ -492,13 +492,16 @@ Changelog:
 
 
         //
-        // repaint scrollbar height and position
+        // repaint scrollbar height and position - if required!!! Otherwise, remove this
         //
         repaint: function(){
-            this.setHandle();
-            this.setHandlePosition();
+			if(this.pane.height() <= this.props.containerHeight) {
+				this.unscrollbar();
+			} else {
+				this.setHandle();
+				this.setHandlePosition();
+			}
         },
-
 
         //
         // scroll to a specific distance from the top
@@ -531,7 +534,7 @@ Changelog:
         // Remove scrollbar dom elements
         //
         unscrollbar: function() {
-          var holder = this.container.find('.scrollbar-pane').find('*');
+          var holder = this.container.find('.scrollbar-pane').html();
           this.container.empty();
           this.container.append(holder);
           this.container.attr('style','');
