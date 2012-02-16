@@ -182,6 +182,7 @@ Changelog:
           return this.each(function() {
             if(this.scrollbar) {
               this.scrollbar.unscrollbar();
+			  this.scrollbar = null;
             }
           });
         }
@@ -535,9 +536,11 @@ Changelog:
         //
         unscrollbar: function() {
           var holder = this.container.find('.scrollbar-pane').html();
-          this.container.empty();
-          this.container.append(holder);
-          this.container.attr('style','');
+			if(holder !== null) {
+				this.container.empty();
+				this.container.append(holder);
+				this.container.attr('style','');
+			}
         },
 
 
