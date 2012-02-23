@@ -1,3 +1,11 @@
+/*!
+jquery scroll - a custom stylable scrollbar
+Version 0.4
+https://github.com/thomd/jquery-scroll
+Copyright (c) 2011 Thomas Duerr (me-at-thomd-dot-net)
+Licensed under the MIT license (https://raw.github.com/thomd/jquery-scroll/master/MIT-LICENSE)
+Modified version at http://github.com/akmjenkins/jquery-scroll
+*/
 /*
 Usage Examples:
 
@@ -159,10 +167,13 @@ Changelog:
         //   $('selector').scrollbar("scrollto", "middle");          // scroll to vertically middle of content
         //   $('selector').scrollbar("scrollto", "bottom");          // scroll to bottom of content
         //   $('selector').scrollbar("scrollto", $('item'));         // scroll to first content item identified by selector $('item')
+        //   $('selector').scrollbar("scrollto", $('item'),speed,easing);         // scroll to first content item identified by selector $('item')
         //
-        scrollto: function(to){
+        scrollto: function(to,speed,easing){
+			var speed = (speed || false),
+			easing = easing || false;
             return this.each(function(){
-                this.scrollbar.scrollto(to);
+                this.scrollbar.scrollto(to,speed,easing);
             });
         },
         
@@ -500,7 +511,7 @@ Changelog:
         //
         // scroll to a specific distance from the top
         //
-        scrollto: function(to){
+        scrollto: function(to,speed,easing){
 
             var distance = 0;
 
@@ -520,8 +531,8 @@ Changelog:
             }
 
             this.handle.top = distance;
-            this.setHandlePosition();
-            this.setContentPosition();
+            this.setHandlePosition(speed,easing);
+            this.setContentPosition(speed,easing);
         },
         
         //
@@ -596,25 +607,38 @@ Changelog:
         //
         // set position of handle
         //
-        setHandlePosition: function(){
+        setHandlePosition: function(speed,easing){
+			var speed = (speed || false),
+			easing = ((easing) ? ($.fn.easing ? easing : 'swing') : false);
 
             // stay within range [handlePosition.min, handlePosition.max]
             this.handle.top = (this.handle.top > this.props.handlePosition.max) ? this.props.handlePosition.max : this.handle.top;
             this.handle.top = (this.handle.top < this.props.handlePosition.min) ? this.props.handlePosition.min : this.handle.top;
 
-            this.handle[0].style.top = this.handle.top + 'px';
+			if(speed && !isNaN(speed)) {
+				this.handle.stop().animate({top:this.handle.top+'px'},speed,easing);
+			} else {
+				this.handle[0].style.top = this.handle.top + 'px';
+			}
         },
 
 
         //
         // set position of content
         //
-        setContentPosition: function(){
+        setContentPosition: function(speed,easing){
+			var speed = (speed || false),
+			easing = ((easing) ? ($.fn.easing ? easing : 'swing') : false);
 
             // derive position of content from position of handle
             this.pane.top = -1 * this.props.handleContentRatio * this.handle.top;
-
-            this.pane[0].style.top = this.pane.top + 'px';
+			
+			if(speed && !isNaN(speed)) {
+				this.pane.stop().animate({top:this.pane.top+'px'},speed,easing);
+			} else {
+				this.pane[0].style.top = this.pane.top + 'px';
+			}
+			
 			this.container.trigger('scrolled');
         },
 
