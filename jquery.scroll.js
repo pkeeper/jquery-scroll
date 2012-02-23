@@ -1,10 +1,3 @@
-/*!
-jquery scroll - a custom stylable scrollbar
-Version 0.4
-https://github.com/thomd/jquery-scroll
-Copyright (c) 2011 Thomas Duerr (me-at-thomd-dot-net)
-Licensed under the MIT license (https://raw.github.com/thomd/jquery-scroll/master/MIT-LICENSE)
-*/
 /*
 Usage Examples:
 
@@ -630,7 +623,9 @@ Changelog:
         // mouse wheel movement
         //
         onMouseWheel: function(ev, delta){
-
+			
+			if(!this.container.hasClass('focused') && !this.container.hasClass('hover')) { return; }
+			
 			delta *= 2.5;
 		
             // calculate new handle position
@@ -726,13 +721,27 @@ Changelog:
         // add class attribute on content while interacting with content
         //
         onContentHover: function(ev){
+		
             if(ev.type === 'mouseenter'){
                 this.container.addClass('hover');
                 this.handleContainer.addClass('hover');
+				
+				//remove the hover from parent scroll panes
+				this.container.closest('div.scrollbar-pane').each(function() {
+					$(this).parent().removeClass('hover focused');
+				});
+				
             } else {
                 this.container.removeClass('hover');
                 this.handleContainer.removeClass('hover');
+				
+				//remove the hover from parent scroll panes
+				this.container.closest('div.scrollbar-pane').each(function() {
+					$(this).parent().addClass('hover focused');
+				});
+				
             }
+			
         },
 
 
