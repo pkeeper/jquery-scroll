@@ -5,6 +5,7 @@ https://github.com/thomd/jquery-scroll
 Copyright (c) 2011 Thomas Duerr (me-at-thomd-dot-net)
 Licensed under the MIT license (https://raw.github.com/thomd/jquery-scroll/master/MIT-LICENSE)
 Modified version at http://github.com/akmjenkins/jquery-scroll
+Further fixes at http://github.com/pkeeper/jquery-scroll
 */
 /*
 Usage Examples:
@@ -649,7 +650,6 @@ Changelog:
         // mouse wheel movement
         //
         onMouseWheel: function(ev, delta){
-			
 			if(!this.container.hasClass('focused') && !this.container.hasClass('hover')) { return; }
 			
 			delta *= 2.5;
@@ -659,9 +659,8 @@ Changelog:
 
             this.setHandlePosition();
             this.setContentPosition();
-
             // prevent default scrolling of the entire document if handle is within [min, max]-range
-            if(this.handle.top > this.props.handlePosition.min && this.handle.top < this.props.handlePosition.max){
+            if(this.handle.top > this.props.handlePosition.min && this.handle.top <= this.props.handlePosition.max){
                 ev.preventDefault();
             }
         },
