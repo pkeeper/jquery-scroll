@@ -173,7 +173,9 @@ Changelog:
 			var speed = (speed || false),
 			easing = easing || false;
             return this.each(function(){
-                this.scrollbar.scrollto(to,speed,easing);
+            	if(this.scrollbar) {
+                	this.scrollbar.scrollto(to,speed,easing);
+               }
             });
         },
         
